@@ -30,6 +30,7 @@ function Login() {
 			id: res.profileObj.googleId,
 			user: res.profileObj.email,
 		}).then(res => {
+			alert('Success')
             LocalStorage.set("token", res.data.token);
         }).catch(err => console.log(err));
         setRedirect(<Navigate to={"/success"} />)

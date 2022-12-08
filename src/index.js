@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './styles/global.css';
-// import './styles/fonts.css';
+import './styles/fonts.css';
 import PageRouter from './pages/Router';
 import reportWebVitals from './reportWebVitals';
 

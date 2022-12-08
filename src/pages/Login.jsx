@@ -1,72 +1,152 @@
-import { GoogleLogin, GoogleLogout } from "react-google-login";
-import { gapi } from "gapi-script";
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 
 import { api as auth } from "../services/api/auth.api";
 import { LocalStorage } from "../services/cache/LocalStorage.service";
 
-function Login() {
+import {
+	UserIcon,
+	LockClosedIcon,
+	EyeIcon,
+	EyeSlashIcon,
+} from "@heroicons/react/24/solid";
 
-    const [redirect, setRedirect] = useState(false);
+function Login() {
+	const [redirect, setRedirect] = useState(false);
+
+	const [user, setUser] = useState("");
+	const [pw, setPw] = useState("");
 
 	useEffect(() => {
-		function start() {
-			gapi.client.init({
-				clientId:
-					"352760083090-rs7ttsjkkd0ja6svvdhn1auik66s27ue.apps.googleusercontent.com",
-				scope: "email",
-			});
-		}
-
-		gapi.load("client:auth2", start);
+		auth.verify().then(() => setRedirect(<Navigate to="/" />)).catch(() => LocalStorage.remove('m-user'))
 	}, []);
 
-	const onSuccess = (res) => {
-		console.log("Login SUCCESS");
-		console.log(res.profileObj);
+	const handleSubmit = (e) => {
 
-		auth.signin({
-			id: res.profileObj.googleId,
-			user: res.profileObj.email,
-		}).then(res => {
-			alert('Success')
-            LocalStorage.set("token", res.data.token);
-        }).catch(err => console.log(err));
-        setRedirect(<Navigate to={"/success"} />)
-	};
+		auth.signin(user, pw).then(res => {
+			LocalStorage.set('m-user', JSON.stringify(res.data.user))
+			LocalStorage.set('m-token', res.data.token)
+			setRedirect(<Navigate to='/' />)
+		})
 
-	const onLogoutSuccess = () => {
-		alert("Logout success!");
-        LocalStorage.remove("token");
-	};
-
-	const onFailure = (res) => {
-		console.log(res);
+		e.preventDefault();
 	};
 
 	return (
 		<div id='login'>
-            {redirect}
-			<GoogleLogin
-				clientId='352760083090-rs7ttsjkkd0ja6svvdhn1auik66s27ue.apps.googleusercontent.com'
-				buttonText='Login with google'
-				// render={renderProps => (
-				//     <button onClick={renderProps.onClick} disabled={renderProps.disabled}>This is my custom Google button</button>
-				// )}
-				onSuccess={onSuccess}
-				onFailure={onFailure}
-				cookiePolicy={"single_host_origin"}
-				isSignedIn={true}
-			/>
+			{redirect}
 
-			<GoogleLogout
-				clientId='352760083090-rs7ttsjkkd0ja6svvdhn1auik66s27ue.apps.googleusercontent.com'
-				buttonText='Logout'
-				onLogoutSuccess={onLogoutSuccess}
-			/>
+			<div className='max-sm:w-3/4 w-1/2 sm:h-full p-3 bg-white rounded sm:grid sm:place-items-center'>
+				<div className="max-sm:w-full w-1/2">
+					<h2 className='text-xl sm:text-2xl text-base-color font-medium'>
+						Linear Meetings
+					</h2>
+					<form onSubmit={handleSubmit} className='w-full mt-4 space-y-2'>
+						<Username user={user} setUser={setUser} />
+						<Password pw={pw} setPw={setPw} />
+						{/* <div className='!mt-0 w-full text-right'>
+							<a href='#' className='text-xs'>
+								esqueceu a senha?
+							</a>
+						</div> */}
+						{/* <div>
+							<span className='text-red-500 text-xs'>Error</span>
+						</div> */}
+						<Submit />
+					</form>
+				</div>
+				
+			</div>
 		</div>
 	);
 }
+
+const Username = ({ user, setUser }) => {
+	return (
+		<label htmlFor='user' className='relative flex items-center'>
+			<input
+				type='text'
+				id='user'
+				placeholder='user'
+				value={user}
+				onChange={(e) => setUser(e.target.value)}
+				className={`peer w-full !outline-0 border-2 border-black focus:border-base-color py-1 sm:py-2 pl-6 sm:pl-8 pr-[18.5ch] sm:pr-[19.1ch] sm: rounded placeholder:text-slate-300 bg-slate-100 valid:border-base-color`}
+				required
+				onInvalid={(e) =>
+					e.target.classList.add("invalid:border-red-500")
+				}
+			/>
+			<UserIcon
+				className={`w-5 aspect-square absolute left-1.5 sm:left-2 ${
+					user ? "text-base-color" : "text-black"
+				} peer-focus:text-base-color`}
+			/>
+			<span
+				className={`absolute right-1.5 sm:right-2.5 text-xs ${
+					user ? "text-black" : "text-slate-300"
+				}`}
+			>
+				@linearequipamentos
+			</span>
+		</label>
+	);
+};
+
+const Password = ({ pw, setPw }) => {
+	const [eye, setEye] = useState(false);
+
+	useEffect(() => {
+		eye && setTimeout(() => setEye(false), 1500);
+	}, [eye]);
+
+	return (
+		<label htmlFor='password' className='relative flex items-center'>
+			<input
+				type={eye ? "text" : "password"}
+				id='password'
+				placeholder='password'
+				value={pw}
+				onChange={(e) => setPw(e.target.value)}
+				className={`peer w-full !outline-0 border-2 border-black focus:border-base-color py-1 sm:py-2 px-6 sm:px-8 rounded placeholder:text-slate-300 bg-slate-100 valid:border-base-color`}
+				required
+				onInvalid={(e) =>
+					e.target.classList.add("invalid:border-red-500")
+				}
+			/>
+			<LockClosedIcon
+				className={`w-5 aspect-square absolute left-1.5 sm:left-2 ${
+					pw ? "text-base-color" : "text-black"
+				} peer-focus:text-base-color`}
+			/>
+			{eye ? (
+				<EyeIcon
+					onClick={() => setEye(false)}
+					className={`w-5 aspect-square absolute right-1.5 sm:right-2 ${
+						pw ? "text-base-color" : "text-slate-300"
+					} peer-focus:text-black cursor-pointer`}
+				/>
+			) : (
+				<EyeSlashIcon
+					onClick={() => setEye(true)}
+					className={`w-5 aspect-square absolute right-1.5 sm:right-2 ${
+						pw ? "text-black" : "text-slate-300"
+					} peer-focus:text-black cursor-pointer`}
+				/>
+			)}
+		</label>
+	);
+};
+
+const Submit = () => {
+	return (
+		<button type='submit' className='btn-login-submit'>
+			Entrar
+		</button>
+	);
+};
+
+const AnonymousLogin = () => {
+	return <button>Fazer agendamento</button>;
+};
 
 export default Login;

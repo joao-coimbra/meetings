@@ -1,3 +1,90 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+	#login {
+		@apply w-screen h-screen max-sm:grid max-sm:place-items-center;
+		margin: 0;
+		padding: 0;
+		font-family: "arial", heletica, sans-serif;
+		font-size: 12px;
+		background: #2980b9
+			url("https://static.tumblr.com/03fbbc566b081016810402488936fbae/pqpk3dn/MRSmlzpj3/tumblr_static_bg3.png")
+			repeat 0 0;
+		-webkit-animation: 50s linear 0s normal none infinite animate;
+		-moz-animation: 50s linear 0s normal none infinite animate;
+		-ms-animation: 50s linear 0s normal none infinite animate;
+		-o-animation: 50s linear 0s normal none infinite animate;
+		animation: 50s linear 0s normal none infinite animate;
+	}
+
+	#painel {
+		@apply w-screen h-screen;
+	}
+
+	.btn-login-submit {
+		@apply w-full py-1.5 sm:py-2.5 bg-base-color rounded hover:bg-secondary-color duration-300 text-white sm:text-sm sm:tracking-wide shadow-lg hover:shadow;
+	}
+
+	.sidebar {
+		@apply fixed left-0 h-full bg-white shadow-lg;
+	}
+
+	.sidebar-mobile {
+		@apply md:hidden;
+	}
+
+	.sidebar-desktop {
+		@apply max-md:hidden;
+	}
+}
+
+* {
+	font-family: "Poppins", "Lora", sans-serif;
+}
+
+@-webkit-keyframes animate {
+	from {
+		background-position: 0 0;
+	}
+	to {
+		background-position: 500px 0;
+	}
+}
+
+@-moz-keyframes animate {
+	from {
+		background-position: 0 0;
+	}
+	to {
+		background-position: 500px 0;
+	}
+}
+
+@-ms-keyframes animate {
+	from {
+		background-position: 0 0;
+	}
+	to {
+		background-position: 500px 0;
+	}
+}
+
+@-o-keyframes animate {
+	from {
+		background-position: 0 0;
+	}
+	to {
+		background-position: 500px 0;
+	}
+}
+
+@keyframes animate {
+	from {
+		background-position: 0 0;
+	}
+	to {
+		background-position: 500px 0;
+	}
+}

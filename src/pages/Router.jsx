@@ -8,14 +8,14 @@ import {
 } from "react-router-dom";
 
 import Login from "./Login";
-import Success from "./Success";
+import Painel from "./Painel";
 
 function PageRouter() {
 	return (
 		<Router>
             <Routes>
-                <Route path="/" element={<Login />} />
-                <Route path="/success" element={<Success />} />
+                <Route path="/" element={<Painel />} />
+                <Route path="/login" element={<Login />} />
             </Routes>
 		</Router>
 	);

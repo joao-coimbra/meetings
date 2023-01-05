@@ -19,7 +19,10 @@ function Login() {
 
 	useEffect(() => {
 		auth.verify(LocalStorage.get(process.env.REACT_APP_COOKIES_TOKEN))
-			.then(() => setRedirect(<Navigate to='/' />))
+			.then((res) => {
+				console.log(res)
+				setRedirect(<Navigate to='/' />)
+			})
 			.catch(() =>
 				LocalStorage.remove(process.env.REACT_APP_COOKIES_USER)
 			);

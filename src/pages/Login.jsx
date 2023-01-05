@@ -18,30 +18,48 @@ function Login() {
 	const [pw, setPw] = useState("");
 
 	useEffect(() => {
-		auth.verify().then(() => setRedirect(<Navigate to="/" />)).catch(() => LocalStorage.remove(process.env.REACT_APP_COOKIES_USER))
+		auth.verify(LocalStorage.get(process.env.REACT_APP_COOKIES_TOKEN))
+			.then(() => setRedirect(<Navigate to='/' />))
+			.catch(() =>
+				LocalStorage.remove(process.env.REACT_APP_COOKIES_USER)
+			);
 	}, []);
 
 	const handleSubmit = (e) => {
-
-		auth.signin(user.includes('@') ? user : user+'@linear.net.br', pw).then(res => {
-			LocalStorage.set(process.env.REACT_APP_COOKIES_USER, JSON.stringify(res.data.user))
-			LocalStorage.set(process.env.REACT_APP_COOKIES_TOKEN, res.data.token)
-			setRedirect(<Navigate to='/' />)
-		})
+		auth.signin(
+			user.includes("@") ? user : user + "@linear.net.br",
+			pw
+		).then((res) => {
+			LocalStorage.set(
+				process.env.REACT_APP_COOKIES_USER,
+				JSON.stringify(res.data.user)
+			);
+			LocalStorage.set(
+				process.env.REACT_APP_COOKIES_TOKEN,
+				res.data.token
+			);
+			setRedirect(<Navigate to='/' />);
+		});
 
 		e.preventDefault();
 	};
 
 	return (
-		<div id='login' className="h-screen max-lg:grid max-lg:place-items-center">
+		<div
+			id='login'
+			className='h-screen max-lg:grid max-lg:place-items-center'
+		>
 			{redirect}
 
 			<div className='max-lg:w-3/4 w-1/2 lg:h-full p-3 bg-white rounded lg:grid lg:place-items-center max-lg:mx-auto'>
-				<div className="max-lg:w-full w-1/2">
+				<div className='max-lg:w-full w-1/2'>
 					<h2 className='text-xl lg:text-2xl text-base-color font-medium'>
 						Linear Meetings
 					</h2>
-					<form onSubmit={handleSubmit} className='w-full mt-4 space-y-2'>
+					<form
+						onSubmit={handleSubmit}
+						className='w-full mt-4 space-y-2'
+					>
 						<Username user={user} setUser={setUser} />
 						<Password pw={pw} setPw={setPw} />
 						{/* <div className='!mt-0 w-full text-right'>
@@ -55,7 +73,6 @@ function Login() {
 						<Submit />
 					</form>
 				</div>
-				
 			</div>
 		</div>
 	);

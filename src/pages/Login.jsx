@@ -18,14 +18,14 @@ function Login() {
 	const [pw, setPw] = useState("");
 
 	useEffect(() => {
-		auth.verify().then(() => setRedirect(<Navigate to="/" />)).catch(() => LocalStorage.remove('m-user'))
+		auth.verify().then(() => setRedirect(<Navigate to="/" />)).catch(() => LocalStorage.remove(process.env.REACT_APP_COOKIES_USER))
 	}, []);
 
 	const handleSubmit = (e) => {
 
-		auth.signin(user, pw).then(res => {
-			LocalStorage.set('m-user', JSON.stringify(res.data.user))
-			LocalStorage.set('m-token', res.data.token)
+		auth.signin(user.includes('@') ? user : user+'@linear.net.br', pw).then(res => {
+			LocalStorage.set(process.env.REACT_APP_COOKIES_USER, JSON.stringify(res.data.user))
+			LocalStorage.set(process.env.REACT_APP_COOKIES_TOKEN, res.data.token)
 			setRedirect(<Navigate to='/' />)
 		})
 
@@ -33,12 +33,12 @@ function Login() {
 	};
 
 	return (
-		<div id='login'>
+		<div id='login' className="h-screen max-lg:grid max-lg:place-items-center">
 			{redirect}
 
-			<div className='max-sm:w-3/4 w-1/2 sm:h-full p-3 bg-white rounded sm:grid sm:place-items-center'>
-				<div className="max-sm:w-full w-1/2">
-					<h2 className='text-xl sm:text-2xl text-base-color font-medium'>
+			<div className='max-lg:w-3/4 w-1/2 lg:h-full p-3 bg-white rounded lg:grid lg:place-items-center max-lg:mx-auto'>
+				<div className="max-lg:w-full w-1/2">
+					<h2 className='text-xl lg:text-2xl text-base-color font-medium'>
 						Linear Meetings
 					</h2>
 					<form onSubmit={handleSubmit} className='w-full mt-4 space-y-2'>
@@ -86,7 +86,7 @@ const Username = ({ user, setUser }) => {
 					user ? "text-black" : "text-slate-300"
 				}`}
 			>
-				@linearequipamentos
+				@linear.net.br
 			</span>
 		</label>
 	);
@@ -145,8 +145,8 @@ const Submit = () => {
 	);
 };
 
-const AnonymousLogin = () => {
-	return <button>Fazer agendamento</button>;
-};
+// const AnonymousLogin = () => {
+// 	return <button>Fazer agendamento</button>;
+// };
 
 export default Login;

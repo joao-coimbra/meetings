@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 
-import { GoogleLogout } from "react-google-login";
+// import { GoogleLogout } from "react-google-login";
 
 import { api as auth } from "../services/api/auth.api";
 
@@ -12,11 +12,13 @@ const Painel = () => {
 	const [redirect, setRedirect] = useState(false);
 
 	const [user, setUser] = useState({});
+	const [oAuth, setAuth] = useState(false);
 
 	useEffect(() => {
-		auth.verify()
+		auth.verify(LocalStorage.get(process.env.REACT_APP_COOKIES_TOKEN))
 			.then(() => {
-				setUser(JSON.parse(LocalStorage.get("m-user")));
+				setUser(JSON.parse(LocalStorage.get(process.env.REACT_APP_COOKIES_USER)));
+				setAuth(true);
 			})
 			.catch(() => setRedirect(<Navigate to='/login' />));
 	}, []);

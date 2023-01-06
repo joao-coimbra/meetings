@@ -25,8 +25,8 @@ const Painel = () => {
 
 	useEffect(() => {
 		auth.verify(LocalStorage.get(process.env.REACT_APP_COOKIES_TOKEN))
-			.then(() => {
-				console.log('SUCCESS')
+			.then((res) => {
+				console.log('SUCCESS', res)
 				setUser(
 					JSON.parse(
 						LocalStorage.get(process.env.REACT_APP_COOKIES_USER)

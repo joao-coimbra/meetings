@@ -24,11 +24,11 @@
 	}
 
 	.menu-button {
-		@apply relative w-8 h-8 p-5 rounded-full border border-slate-600 grid place-content-center duration-300 hover:bg-slate-600/40;
+		@apply relative w-8 h-8 p-5 rounded-full border border-black dark:border-slate-600 grid place-content-center duration-300 hover:dark:bg-slate-600/40;
 	}
 
 	.avatar {
-		@apply relative overflow-hidden bg-cover bg-no-repeat bg-center w-8 h-8 p-5 rounded-full border border-slate-600 grid place-content-center duration-300 hover:bg-slate-600;
+		@apply relative overflow-hidden bg-cover bg-no-repeat bg-center w-[42px] dark:w-8 h-[42px] dark:h-8 p-5 rounded-full dark:border border-black dark:border-slate-600 grid place-content-center duration-300 hover:bg-slate-600;
 	}
 
 	.ping {

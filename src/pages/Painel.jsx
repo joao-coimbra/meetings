@@ -9,7 +9,13 @@ import { LocalStorage } from "../services/cache/LocalStorage.service";
 // import Sidebar from "../components/global/Sidebar";
 
 // ICONS
-import { Squares2X2Icon, BellIcon } from "@heroicons/react/24/outline";
+import {
+	Squares2X2Icon,
+	BellIcon,
+	ComputerDesktopIcon,
+	SunIcon,
+	MoonIcon,
+} from "@heroicons/react/24/outline";
 
 const Painel = () => {
 	const [redirect, setRedirect] = useState(false);
@@ -20,6 +26,7 @@ const Painel = () => {
 	useEffect(() => {
 		auth.verify(LocalStorage.get(process.env.REACT_APP_COOKIES_TOKEN))
 			.then(() => {
+				console.log('SUCCESS')
 				setUser(
 					JSON.parse(
 						LocalStorage.get(process.env.REACT_APP_COOKIES_USER)
@@ -27,7 +34,10 @@ const Painel = () => {
 				);
 				setAuth(true);
 			})
-			.catch(() => setRedirect(<Navigate to='/login' />));
+			.catch(() => {
+				console.log('LOSS')
+				setRedirect(<Navigate to='/login' />)
+			});
 	}, []);
 
 	// console.log(user)
@@ -37,26 +47,30 @@ const Painel = () => {
 			{redirect}
 
 			<div>
+				<Menu>
+					<MenuButton />
+					<Hello />
+					<LeftMenu>
+						<BellButton notification={true} />
+						<Avatar
+							logout={() => {
+								LocalStorage.remove(
+									process.env.REACT_APP_COOKIES_TOKEN
+								);
+								setRedirect(<Navigate to='/login' />);
+							}}
+						/>
+					</LeftMenu>
+				</Menu>
 				<Screen>
-					<Menu>
-						<MenuButton />
-						<Hello />
-						<LeftMenu>
-							<BellButton notification={true} />
-							<Avatar
-								logout={() => {
-									LocalStorage.remove(
-										process.env.REACT_APP_COOKIES_TOKEN
-									);
-									setRedirect(<Navigate to='/login' />);
-								}}
-							/>
-						</LeftMenu>
-					</Menu>
 					{/* <hr className="my-6 opacity-20 sticky top-32 z-40" /> */}
-					<h1 className="text-white text-xl lg:text-2xl font-thin">Reserve um horário para reunião.</h1>
-					<span className="text-slate-500 text-xs lg:text-base font-thin">Em poucos passos, uma sala estará reservada para você.</span>
-					<div className="h-screen"></div>
+					<h1 className='dark:text-white text-xl lg:text-2xl font-thin'>
+						Reserve um horário para reunião.
+					</h1>
+					<span className='text-slate-400 dark:text-slate-500 text-xs lg:text-base font-thin'>
+						Em poucos passos, uma sala estará reservada para você.
+					</span>
+					<div className='h-screen'></div>
 				</Screen>
 			</div>
 		</div>
@@ -73,8 +87,10 @@ const Screen = ({ children }) => {
 
 const Menu = ({ children }) => {
 	return (
-		<div className='sticky bg-slate-800 pt-4 lg:pt-8 pb-4 lg:pb-10 border-b border-slate-600 mb-6 top-0 flex justify-between items-start z-40'>
-			{children}
+		<div className='sticky top-0 bg-white dark:bg-slate-800 pt-4 lg:pt-8'>
+			<div className='container max-w-[92%] 2xl:max-w-7xl mx-auto pb-4 lg:pb-10 border-b dark:border-slate-600 mb-6 flex justify-between items-start z-40'>
+				{children}
+			</div>
 		</div>
 	);
 };
@@ -91,7 +107,7 @@ const Hello = () => {
 					.replace(".", "")}{" "}
 				{date.toLocaleDateString(undefined, { year: "2-digit" })}
 			</span>
-			<span className='text-xs lg:text-sm dark:text-slate-500'>
+			<span className='text-xs lg:text-sm font-thin text-slate-400 dark:text-slate-500'>
 				4 reuniões para hoje.
 			</span>
 		</div>
@@ -106,18 +122,16 @@ const MenuButton = () => {
 	};
 
 	return (
-		<div className='relative'>
-			<div
-				onClick={() => setOpen(false)}
-				className={`fixed w-screen h-screen left-0 top-0 ${
-					!open ? "hidden" : "block"
-				} `}
-			></div>
+		<div
+			className='relative'
+			onBlur={() => setTimeout(() => setOpen(false), 40)}
+		>
 			<button onClick={handleClick} className='menu-button group'>
-				<Squares2X2Icon className='w-6 h-6 p-px text-white duration-300 group-hover:fill-white' />
+				<Squares2X2Icon className='w-6 h-6 p-px dark:text-white duration-300 group-hover:fill-black dark:group-hover:fill-white' />
 			</button>
 
 			<ul
+				onBlur={() => setOpen(false)}
 				className={`z-40 absolute text-left top-full left-0 rounded mt-3 py-0.5 bg-slate-700 shadow-lg duration-200 ${
 					!open
 						? "scale-y-0 opacity-0 -translate-y-1/2"
@@ -149,7 +163,7 @@ const BellButton = ({ notification }) => {
 				notification ? "before:animate-ping" : ""
 			}`}
 		>
-			<BellIcon className='w-6 h-6 p-px text-white duration-300 group-hover:fill-white' />
+			<BellIcon className='w-6 h-6 p-px dark:text-white duration-300 group-hover:fill-black dark:group-hover:fill-white' />
 		</button>
 	);
 };
@@ -157,14 +171,18 @@ const BellButton = ({ notification }) => {
 const Avatar = ({ user, logout }) => {
 	const [open, setOpen] = useState(false);
 
+	const setTheme = () =>
+		LocalStorage.get("theme") === "dark" ||
+		(!("theme" in localStorage) &&
+			window.matchMedia("(prefers-color-scheme: dark)").matches)
+			? document.documentElement.classList.add("dark")
+			: document.documentElement.classList.remove("dark");
+
 	return (
-		<div className='relative max-lg:hidden'>
-			<div
-				onClick={() => setOpen(false)}
-				className={`fixed w-screen h-screen left-0 top-0 ${
-					!open ? "hidden" : "block"
-				} `}
-			></div>
+		<div
+			className='relative max-lg:hidden'
+			onBlur={() => setTimeout(() => setOpen(false), 40)}
+		>
 			<button
 				onClick={() => setOpen((prevState) => !prevState)}
 				className='avatar'
@@ -174,24 +192,78 @@ const Avatar = ({ user, logout }) => {
 				}}
 			></button>
 			<ul
-				className={`z-40 absolute text-right top-full right-0 rounded mt-5 py-0.5 bg-slate-700 shadow-lg duration-200 ${
+				className={`z-40 absolute text-right top-full right-0 rounded mt-3 py-0.5 bg-white dark:bg-slate-700 shadow-lg duration-200 ${
 					!open
 						? "scale-y-0 opacity-0 -translate-y-1/2"
 						: "scale-y-100 opacity-100"
 				}`}
 			>
-				<li className='px-4 py-2 text-slate-400 hover:bg-slate-600 hover:text-slate-300 duration-300 cursor-pointer text-sm'>
+				<li className='px-4 py-2 text-black dark:text-slate-400 hover:bg-sky-400 hover:text-white dark:hover:bg-slate-600 dark:hover:text-slate-300 duration-300 cursor-pointer text-sm'>
 					Configurações
 				</li>
-				<li className='px-4 py-2 text-slate-400 hover:bg-slate-600 hover:text-slate-300 duration-300 cursor-pointer text-sm'>
-					Configurações
-				</li>
-				<li className='px-4 py-2 text-slate-400 hover:bg-slate-600 hover:text-slate-300 duration-300 cursor-pointer text-sm'>
+				<li className='px-4 py-2 text-black dark:text-slate-400 hover:bg-sky-400 hover:text-white dark:hover:bg-slate-600 dark:hover:text-slate-300 duration-300 cursor-pointer text-sm'>
 					Configurações
 				</li>
 				<li
-					onClick={logout}
-					className='px-4 py-2 border-t border-slate-800 text-slate-400 hover:bg-slate-600 hover:text-slate-300 duration-300 cursor-pointer text-sm'
+					onClick={(e) => {
+						// clearTimeout(close)
+						// logout()
+					}}
+					className='group relative px-4 py-2 text-black dark:text-slate-400 hover:bg-sky-400 hover:text-white dark:hover:bg-slate-600 dark:hover:text-slate-300 duration-300 cursor-pointer text-sm'
+				>
+					Tema
+					<ul className='scale-0 opacity-0 -translate-y-1/2 translate-x-1/2 group-hover:scale-100 group-hover:opacity-100 group-hover:-translate-y-0.5 group-hover:translate-x-0 absolute right-full top-0 rounded rounded-tr-none py-0.5 bg-white dark:bg-slate-700 shadow-lg duration-200'>
+						<li
+							onClick={() => {
+								LocalStorage.set("theme", "light");
+								setTheme();
+							}}
+							className={`flex items-center justify-end gap-2 px-4 py-2 text-black dark:text-slate-400 hover:bg-sky-400 hover:text-white dark:hover:bg-slate-600 dark:hover:text-slate-300 duration-300 cursor-pointer text-sm relative ${
+								LocalStorage.get("theme") === "light"
+									? "before:absolute before:h-full before:left-0 before:w-0.5 before:bg-sky-400 dark:before:bg-slate-400 before:rounded-r-lg"
+									: ""
+							}`}
+						>
+							Light
+							<SunIcon className='w-4 h-4' />
+						</li>
+						<li
+							onClick={() => {
+								LocalStorage.set("theme", "dark");
+								setTheme();
+							}}
+							className={`flex items-center justify-end gap-2 px-4 py-2 text-black dark:text-slate-400 hover:bg-sky-400 hover:text-white dark:hover:bg-slate-600 dark:hover:text-slate-300 duration-300 cursor-pointer text-sm relative ${
+								LocalStorage.get("theme") === "dark"
+									? "before:absolute before:h-full before:left-0 before:w-0.5 before:bg-sky-400 dark:before:bg-slate-400 before:rounded-r-lg"
+									: ""
+							}`}
+						>
+							Dark
+							<MoonIcon className='w-4 h-4' />
+						</li>
+						<li
+							onClick={() => {
+								LocalStorage.remove("theme");
+								setTheme();
+							}}
+							className={`flex items-center justify-end gap-2 px-4 py-2 text-black dark:text-slate-400 hover:bg-sky-400 hover:text-white dark:hover:bg-slate-600 dark:hover:text-slate-300 duration-300 cursor-pointer text-sm relative ${
+								!LocalStorage.get("theme")
+									? "before:absolute before:h-full before:left-0 before:w-0.5 before:bg-sky-400 dark:before:bg-slate-400 before:rounded-r-lg"
+									: ""
+							}`}
+						>
+							System
+							<ComputerDesktopIcon className='w-4 h-4' />
+						</li>
+					</ul>
+				</li>
+				<li
+					onClick={(e) => {
+						e.preventDefault();
+						e.stopPropagation();
+						logout();
+					}}
+					className='px-4 py-2 border-t dark:border-slate-800 text-black dark:text-slate-400 hover:bg-sky-400 hover:text-white dark:hover:bg-slate-600 dark:hover:text-slate-300 duration-300 cursor-pointer text-sm'
 				>
 					Deslogar
 				</li>

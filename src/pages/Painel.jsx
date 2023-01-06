@@ -8,25 +8,28 @@ import { api as auth } from "../services/api/auth.api";
 import { LocalStorage } from "../services/cache/LocalStorage.service";
 // import Sidebar from "../components/global/Sidebar";
 
-// ICONS
+// Icons
 import {
 	Squares2X2Icon,
 	BellIcon,
 	ComputerDesktopIcon,
 	SunIcon,
 	MoonIcon,
+	XMarkIcon,
+	PlusIcon,
 } from "@heroicons/react/24/outline";
 
 const Painel = () => {
 	const [redirect, setRedirect] = useState(false);
+
+	const [wrapper, setWrapper] = useState({});
 
 	const [user, setUser] = useState({});
 	const [oAuth, setAuth] = useState(false);
 
 	useEffect(() => {
 		auth.verify(LocalStorage.get(process.env.REACT_APP_COOKIES_TOKEN))
-			.then((res) => {
-				console.log('SUCCESS', res)
+			.then(() => {
 				setUser(
 					JSON.parse(
 						LocalStorage.get(process.env.REACT_APP_COOKIES_USER)
@@ -35,8 +38,8 @@ const Painel = () => {
 				setAuth(true);
 			})
 			.catch(() => {
-				console.log('LOSS')
-				setRedirect(<Navigate to='/login' />)
+				console.log("LOSS");
+				setRedirect(<Navigate to='/login' />);
 			});
 	}, []);
 
@@ -64,14 +67,214 @@ const Painel = () => {
 				</Menu>
 				<Screen>
 					{/* <hr className="my-6 opacity-20 sticky top-32 z-40" /> */}
-					<h1 className='dark:text-white text-xl lg:text-2xl font-thin'>
-						Reserve um horário para reunião.
-					</h1>
-					<span className='text-slate-400 dark:text-slate-500 text-xs lg:text-base font-thin'>
-						Em poucos passos, uma sala estará reservada para você.
-					</span>
-					<div className='h-screen'></div>
+					<div className='title'>
+						<h1 className='dark:text-white text-xl lg:text-2xl font-thin'>
+							Reserve um horário para reunião.
+						</h1>
+						<span className='text-slate-400 dark:text-slate-500 text-xs lg:text-base font-thin'>
+							Em poucos passos, uma sala estará reservada para
+							você.
+						</span>
+					</div>
+
+					<div className='h-screen'>
+						<h2 className='text-xl dark:text-white font-thin'>
+							Escolha uma sala
+						</h2>
+						<div className='grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-2 mt-4'>
+							<button
+								onClick={() =>
+									setWrapper({
+										room: {
+											component: (
+												<WrapperRoom
+													title='Sala Principal'
+													close={() =>
+														setWrapper((prev) => {
+															return {
+																...prev,
+																room: false,
+															};
+														})
+													}
+												/>
+											),
+											status: true,
+										},
+									})
+								}
+								className='dark:bg-slate-700 dark:hover:bg-slate-600 duration-100 rounded p-2 flex flex-col shadow-lg'
+							>
+								<span className='dark:text-white'>
+									Sala Principal
+								</span>
+								<span className='dark:text-slate-400 font-thin text-sm'>
+									8 reservas
+								</span>
+							</button>
+							<button
+								onClick={() =>
+									setWrapper({
+										room: {
+											component: (
+												<WrapperRoom
+													title='Sala 2'
+													close={() =>
+														setWrapper((prev) => {
+															return {
+																...prev,
+																room: false,
+															};
+														})
+													}
+												/>
+											),
+											status: true,
+										},
+									})
+								}
+								className='dark:bg-slate-700 dark:hover:bg-slate-600 duration-100 rounded p-2 flex flex-col shadow-lg'
+							>
+								<span className='dark:text-white'>Sala 2</span>
+								<span className='dark:text-slate-400 font-thin text-sm'>
+									16 reservas
+								</span>
+							</button>
+						</div>
+					</div>
 				</Screen>
+
+				{wrapper.room?.status && wrapper.room.component}
+			</div>
+		</div>
+	);
+};
+
+const WrapperRoom = ({ title, close }) => {
+	const date = new Date();
+
+	return (
+		<div
+			className='fixed w-full h-screen grid place-items-center top-0 left-0 bg-black/40'
+			onClick={close}
+		>
+			<div
+				className='relative rounded bg-slate-700 container max-w-[92%] 2xl:max-w-7xl mx-auto p-4'
+				onClick={(e) => {
+					e.stopPropagation();
+					e.preventDefault();
+				}}
+			>
+				<h3 className='dark:text-white font-light text-xl'>{title}</h3>
+				<button className='absolute right-4 top-4' onClick={close}>
+					<XMarkIcon className='w-6 h-6 text-slate-400 hover:text-slate-200' />
+				</button>
+
+				<div className='mt-4'>
+					<div className='grid grid-cols-1 md:grid-cols-4 xl:grid-cols-6 gap-2'>
+						<button
+							onClick={() => {}}
+							className='dark:bg-slate-600 dark:hover:bg-slate-500 duration-100 rounded p-2 flex flex-col shadow-lg'
+						>
+							<span className='capitalize dark:text-white font-thin truncate max-w-full'>
+								{date.toLocaleDateString(undefined, {
+									weekday: "long",
+								})}
+								,{" "}
+								{date.toLocaleDateString(undefined, {
+									day: "2-digit",
+								})}{" "}
+								{date
+									.toLocaleDateString(undefined, {
+										month: "short",
+									})
+									.replace(".", "")}{" "}
+								{date.toLocaleDateString(undefined, {
+									year: "2-digit",
+								})}
+							</span>
+							<div className='w-full flex justify-between items-end'>
+								<span className='dark:text-slate-400 font-thin text-sm'>
+									Patrícia
+								</span>
+								<span className='dark:text-slate-400 font-thin text-xs'>
+									08:30 - 09:00
+								</span>
+							</div>
+						</button>
+						<button
+							onClick={() => {}}
+							className='dark:bg-slate-600 dark:hover:bg-slate-500 duration-100 rounded p-2 flex flex-col shadow-lg'
+						>
+							<span className='capitalize dark:text-white font-thin truncate max-w-full'>
+								{date.toLocaleDateString(undefined, {
+									weekday: "long",
+								})}
+								,{" "}
+								{date.toLocaleDateString(undefined, {
+									day: "2-digit",
+								})}{" "}
+								{date
+									.toLocaleDateString(undefined, {
+										month: "short",
+									})
+									.replace(".", "")}{" "}
+								{date.toLocaleDateString(undefined, {
+									year: "2-digit",
+								})}
+							</span>
+							<div className='w-full flex justify-between items-end'>
+								<span className='dark:text-slate-400 font-thin text-sm'>
+									Fernando
+								</span>
+								<span className='dark:text-slate-400 font-thin text-xs'>
+									11:30 - 13:00
+								</span>
+							</div>
+						</button>
+						<button
+							onClick={() => {}}
+							className='dark:bg-slate-600 dark:hover:bg-slate-500 duration-100 rounded p-2 flex flex-col justify-between shadow-lg'
+						>
+							<span className='capitalize dark:text-white font-thin truncate max-w-full'>
+								{date.toLocaleDateString(undefined, {
+									weekday: "long",
+								})}
+								,{" "}
+								{date.toLocaleDateString(undefined, {
+									day: "2-digit",
+								})}{" "}
+								{date
+									.toLocaleDateString(undefined, {
+										month: "short",
+									})
+									.replace(".", "")}{" "}
+								{date.toLocaleDateString(undefined, {
+									year: "2-digit",
+								})}
+							</span>
+							<div className='w-full flex justify-between items-end'>
+								<span className='dark:text-slate-400 font-thin text-sm'>
+									Bianca
+								</span>
+								<span className='dark:text-slate-400 font-thin text-xs'>
+									13:00 - 13:45
+								</span>
+							</div>
+						</button>
+					</div>
+					<div className='grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-2 mt-3'>
+						<button
+							onClick={() => {}}
+							className='dark:border-2 border-dashed dark:border-slate-600 dark:hover:bg-slate-600 duration-100 rounded p-2 flex flex-col justify-center items-center shadow-lg'
+						>
+							<PlusIcon className='w-5 h-5 text-slate-400' />
+							<span className='text-slate-400 text-sm'>
+								Agendar horário
+							</span>
+						</button>
+					</div>
+				</div>
 			</div>
 		</div>
 	);
@@ -79,7 +282,7 @@ const Painel = () => {
 
 const Screen = ({ children }) => {
 	return (
-		<div className='min-h-screen container max-w-[92%] 2xl:max-w-7xl mx-auto'>
+		<div className='min-h-screen container max-w-[92%] 2xl:max-w-7xl mx-auto space-y-6 md:space-y-12'>
 			{children}
 		</div>
 	);
@@ -124,7 +327,7 @@ const MenuButton = () => {
 	return (
 		<div
 			className='relative'
-			onBlur={() => setTimeout(() => setOpen(false), 40)}
+			onBlur={() => setTimeout(() => setOpen(false), 100)}
 		>
 			<button onClick={handleClick} className='menu-button group'>
 				<Squares2X2Icon className='w-6 h-6 p-px dark:text-white duration-300 group-hover:fill-black dark:group-hover:fill-white' />
@@ -181,7 +384,7 @@ const Avatar = ({ user, logout }) => {
 	return (
 		<div
 			className='relative max-lg:hidden'
-			onBlur={() => setTimeout(() => setOpen(false), 40)}
+			onBlur={() => setTimeout(() => setOpen(false), 100)}
 		>
 			<button
 				onClick={() => setOpen((prevState) => !prevState)}

@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-	darkMode: 'class',
+	darkMode: "class",
 	content: ["./src/**/*.{js,jsx,ts,tsx}"],
 	theme: {
 		extend: {
@@ -10,7 +10,17 @@ module.exports = {
 				"secondary-color-hover": "#6bb8f7",
 				"terciary-color": "#ff5722",
 			},
+			animation: {
+				bellbeating: "bellbeating 1s ease-in-out infinite",
+			},
+			keyframes: {
+				bellbeating: {
+					"0%, 40%": { transform: "rotate(0deg)" },
+					"50%, 80%": { transform: "rotate(-3deg)" },
+					"65%": { transform: "rotate(3deg)" },
+				},
+			},
 		},
 	},
-	plugins: [],
+	plugins: [require("prettier-plugin-tailwindcss")],
 };

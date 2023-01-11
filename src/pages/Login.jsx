@@ -21,7 +21,7 @@ function Login() {
 		auth.verify(LocalStorage.get(process.env.REACT_APP_COOKIES_TOKEN))
 			.then(() => {
 				// console.log(res)
-				setRedirect(<Navigate to='/' />)
+				setRedirect(<Navigate to='/' />);
 			})
 			.catch(() =>
 				LocalStorage.remove(process.env.REACT_APP_COOKIES_USER)
@@ -54,14 +54,14 @@ function Login() {
 		>
 			{redirect}
 
-			<div className='max-lg:w-3/4 w-1/2 lg:h-full p-3 bg-white rounded lg:grid lg:place-items-center max-lg:mx-auto'>
-				<div className='max-lg:w-full w-1/2'>
-					<h2 className='text-xl lg:text-2xl text-base-color font-medium'>
+			<div className='w-1/2 rounded bg-white p-3 max-lg:mx-auto max-lg:w-3/4 lg:grid lg:h-full lg:place-items-center'>
+				<div className='w-1/2 max-lg:w-full'>
+					<h2 className='text-xl font-medium text-base-color lg:text-2xl'>
 						Linear Meetings
 					</h2>
 					<form
 						onSubmit={handleSubmit}
-						className='w-full mt-4 space-y-2'
+						className='mt-4 w-full space-y-2'
 					>
 						<Username user={user} setUser={setUser} />
 						<Password pw={pw} setPw={setPw} />
@@ -90,19 +90,19 @@ const Username = ({ user, setUser }) => {
 				placeholder='user'
 				value={user}
 				onChange={(e) => setUser(e.target.value)}
-				className={`peer w-full !outline-0 border-2 border-black focus:border-base-color py-1 sm:py-2 pl-6 sm:pl-8 pr-[18.5ch] sm:pr-[19.1ch] sm: rounded placeholder:text-slate-300 bg-slate-100 valid:border-base-color`}
+				className={`sm: peer w-full rounded border-2 border-black bg-slate-100 py-1 pl-6 pr-[18.5ch] !outline-0 placeholder:text-slate-300 valid:border-base-color focus:border-base-color sm:py-2 sm:pl-8 sm:pr-[19.1ch]`}
 				required
 				onInvalid={(e) =>
 					e.target.classList.add("invalid:border-red-500")
 				}
 			/>
 			<UserIcon
-				className={`w-5 aspect-square absolute left-1.5 sm:left-2 ${
+				className={`absolute left-1.5 aspect-square w-5 sm:left-2 ${
 					user ? "text-base-color" : "text-black"
 				} peer-focus:text-base-color`}
 			/>
 			<span
-				className={`absolute right-1.5 sm:right-2.5 text-xs ${
+				className={`absolute right-1.5 text-xs sm:right-2.5 ${
 					user ? "text-black" : "text-slate-300"
 				}`}
 			>
@@ -127,30 +127,30 @@ const Password = ({ pw, setPw }) => {
 				placeholder='password'
 				value={pw}
 				onChange={(e) => setPw(e.target.value)}
-				className={`peer w-full !outline-0 border-2 border-black focus:border-base-color py-1 sm:py-2 px-6 sm:px-8 rounded placeholder:text-slate-300 bg-slate-100 valid:border-base-color`}
+				className={`peer w-full rounded border-2 border-black bg-slate-100 py-1 px-6 !outline-0 placeholder:text-slate-300 valid:border-base-color focus:border-base-color sm:py-2 sm:px-8`}
 				required
 				onInvalid={(e) =>
 					e.target.classList.add("invalid:border-red-500")
 				}
 			/>
 			<LockClosedIcon
-				className={`w-5 aspect-square absolute left-1.5 sm:left-2 ${
+				className={`absolute left-1.5 aspect-square w-5 sm:left-2 ${
 					pw ? "text-base-color" : "text-black"
 				} peer-focus:text-base-color`}
 			/>
 			{eye ? (
 				<EyeIcon
 					onClick={() => setEye(false)}
-					className={`w-5 aspect-square absolute right-1.5 sm:right-2 ${
+					className={`absolute right-1.5 aspect-square w-5 sm:right-2 ${
 						pw ? "text-base-color" : "text-slate-300"
-					} peer-focus:text-black cursor-pointer`}
+					} cursor-pointer peer-focus:text-black`}
 				/>
 			) : (
 				<EyeSlashIcon
 					onClick={() => setEye(true)}
-					className={`w-5 aspect-square absolute right-1.5 sm:right-2 ${
+					className={`absolute right-1.5 aspect-square w-5 sm:right-2 ${
 						pw ? "text-black" : "text-slate-300"
-					} peer-focus:text-black cursor-pointer`}
+					} cursor-pointer peer-focus:text-black`}
 				/>
 			)}
 		</label>

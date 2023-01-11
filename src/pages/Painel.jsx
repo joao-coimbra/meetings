@@ -68,20 +68,20 @@ const Painel = () => {
 				<Screen>
 					{/* <hr className="my-6 opacity-20 sticky top-32 z-40" /> */}
 					<div className='title'>
-						<h1 className='dark:text-white text-xl lg:text-2xl font-thin'>
+						<h1 className='text-xl font-thin dark:text-white lg:text-2xl'>
 							Reserve um horário para reunião.
 						</h1>
-						<span className='text-slate-400 dark:text-slate-500 text-xs lg:text-base font-thin'>
+						<span className='text-xs font-thin text-slate-400 dark:text-slate-500 lg:text-base'>
 							Em poucos passos, uma sala estará reservada para
 							você.
 						</span>
 					</div>
 
 					<div className='h-screen'>
-						<h2 className='text-xl dark:text-white font-thin'>
+						<h2 className='text-xl font-thin dark:text-white'>
 							Escolha uma sala
 						</h2>
-						<div className='grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-2 mt-4'>
+						<div className='mt-4 grid grid-cols-1 gap-2 md:grid-cols-4 lg:grid-cols-6'>
 							<button
 								onClick={() =>
 									setWrapper({
@@ -103,12 +103,12 @@ const Painel = () => {
 										},
 									})
 								}
-								className='dark:bg-slate-700 dark:hover:bg-slate-600 duration-100 rounded p-2 flex flex-col shadow-lg'
+								className='flex flex-col rounded p-2 shadow-lg duration-100 dark:bg-slate-700 dark:hover:bg-slate-600'
 							>
 								<span className='dark:text-white'>
 									Sala Principal
 								</span>
-								<span className='dark:text-slate-400 font-thin text-sm'>
+								<span className='text-sm font-thin dark:text-slate-400'>
 									8 reservas
 								</span>
 							</button>
@@ -133,10 +133,10 @@ const Painel = () => {
 										},
 									})
 								}
-								className='dark:bg-slate-700 dark:hover:bg-slate-600 duration-100 rounded p-2 flex flex-col shadow-lg'
+								className='flex flex-col rounded p-2 shadow-lg duration-100 dark:bg-slate-700 dark:hover:bg-slate-600'
 							>
 								<span className='dark:text-white'>Sala 2</span>
-								<span className='dark:text-slate-400 font-thin text-sm'>
+								<span className='text-sm font-thin dark:text-slate-400'>
 									16 reservas
 								</span>
 							</button>
@@ -155,23 +155,23 @@ const WrapperRoom = ({ title, close }) => {
 
 	return (
 		<div
-			className='fixed w-full h-screen grid place-items-center top-0 left-0 bg-black/40'
+			className='fixed top-0 left-0 grid h-screen w-full place-items-center bg-black/40'
 			onClick={close}
 		>
 			<div
-				className='relative rounded bg-slate-700 container max-w-[92%] 2xl:max-w-7xl mx-auto p-4'
+				className='container relative mx-auto max-w-[92%] rounded bg-slate-700 p-4 2xl:max-w-7xl'
 				onClick={(e) => {
 					e.stopPropagation();
 					e.preventDefault();
 				}}
 			>
-				<h3 className='dark:text-white font-light text-xl'>{title}</h3>
+				<h3 className='text-xl font-light dark:text-white'>{title}</h3>
 				<button className='absolute right-4 top-4' onClick={close}>
-					<XMarkIcon className='w-6 h-6 text-slate-400 hover:text-slate-200' />
+					<XMarkIcon className='h-6 w-6 text-slate-400 hover:text-slate-200' />
 				</button>
 
 				<div className='mt-4'>
-					<div className='grid grid-cols-1 md:grid-cols-4 xl:grid-cols-6 gap-2'>
+					{/* <div className='grid grid-cols-1 md:grid-cols-4 xl:grid-cols-6 gap-2'>
 						<button
 							onClick={() => {}}
 							className='dark:bg-slate-600 dark:hover:bg-slate-500 duration-100 rounded p-2 flex flex-col shadow-lg'
@@ -273,7 +273,7 @@ const WrapperRoom = ({ title, close }) => {
 								Agendar horário
 							</span>
 						</button>
-					</div>
+					</div> */}
 				</div>
 			</div>
 		</div>
@@ -282,7 +282,7 @@ const WrapperRoom = ({ title, close }) => {
 
 const Screen = ({ children }) => {
 	return (
-		<div className='min-h-screen container max-w-[92%] 2xl:max-w-7xl mx-auto space-y-6 md:space-y-12'>
+		<div className='container mx-auto min-h-screen max-w-[92%] space-y-6 md:space-y-12 2xl:max-w-7xl'>
 			{children}
 		</div>
 	);
@@ -290,8 +290,8 @@ const Screen = ({ children }) => {
 
 const Menu = ({ children }) => {
 	return (
-		<div className='sticky top-0 bg-white dark:bg-slate-800 pt-4 lg:pt-8'>
-			<div className='container max-w-[92%] 2xl:max-w-7xl mx-auto pb-4 lg:pb-10 border-b dark:border-slate-600 mb-6 flex justify-between items-start z-40'>
+		<div className='sticky top-0 bg-white pt-4 dark:bg-slate-800 lg:pt-8'>
+			<div className='container z-40 mx-auto mb-6 flex max-w-[92%] items-start justify-between border-b pb-4 dark:border-slate-600 lg:pb-10 2xl:max-w-7xl'>
 				{children}
 			</div>
 		</div>
@@ -302,7 +302,7 @@ const Hello = () => {
 	const date = new Date();
 	return (
 		<div className='flex flex-col items-center'>
-			<span className='capitalize dark:text-white font-thin lg:text-lg'>
+			<span className='font-thin capitalize dark:text-white lg:text-lg'>
 				{date.toLocaleDateString(undefined, { weekday: "long" })},{" "}
 				{date.toLocaleDateString(undefined, { day: "2-digit" })}{" "}
 				{date
@@ -310,7 +310,7 @@ const Hello = () => {
 					.replace(".", "")}{" "}
 				{date.toLocaleDateString(undefined, { year: "2-digit" })}
 			</span>
-			<span className='text-xs lg:text-sm font-thin text-slate-400 dark:text-slate-500'>
+			<span className='text-xs font-thin text-slate-400 dark:text-slate-500 lg:text-sm'>
 				4 reuniões para hoje.
 			</span>
 		</div>
@@ -330,24 +330,24 @@ const MenuButton = () => {
 			onBlur={() => setTimeout(() => setOpen(false), 100)}
 		>
 			<button onClick={handleClick} className='menu-button group'>
-				<Squares2X2Icon className='w-6 h-6 p-px dark:text-white duration-300 group-hover:fill-black dark:group-hover:fill-white' />
+				<Squares2X2Icon className='h-6 w-6 p-px duration-300 group-hover:fill-black dark:text-white dark:group-hover:fill-white' />
 			</button>
 
 			<ul
 				onBlur={() => setOpen(false)}
-				className={`z-40 absolute text-left top-full left-0 rounded mt-3 py-0.5 bg-slate-700 shadow-lg duration-200 ${
+				className={`absolute top-full left-0 z-40 mt-3 rounded bg-slate-700 py-0.5 text-left shadow-lg duration-200 ${
 					!open
-						? "scale-y-0 opacity-0 -translate-y-1/2"
+						? "-translate-y-1/2 scale-y-0 opacity-0"
 						: "scale-y-100 opacity-100"
 				}`}
 			>
-				<li className='px-4 py-2 text-slate-400 hover:bg-slate-600 hover:text-slate-300 duration-300 cursor-pointer text-sm'>
+				<li className='cursor-pointer px-4 py-2 text-sm text-slate-400 duration-300 hover:bg-slate-600 hover:text-slate-300'>
 					Configurações
 				</li>
-				<li className='px-4 py-2 text-slate-400 hover:bg-slate-600 hover:text-slate-300 duration-300 cursor-pointer text-sm'>
+				<li className='cursor-pointer px-4 py-2 text-sm text-slate-400 duration-300 hover:bg-slate-600 hover:text-slate-300'>
 					Configurações
 				</li>
-				<li className='px-4 py-2 text-slate-400 hover:bg-slate-600 hover:text-slate-300 duration-300 cursor-pointer text-sm'>
+				<li className='cursor-pointer px-4 py-2 text-sm text-slate-400 duration-300 hover:bg-slate-600 hover:text-slate-300'>
 					Outros
 				</li>
 			</ul>
@@ -366,7 +366,7 @@ const BellButton = ({ notification }) => {
 				notification ? "before:animate-ping" : ""
 			}`}
 		>
-			<BellIcon className='w-6 h-6 p-px dark:text-white duration-300 group-hover:fill-black dark:group-hover:fill-white' />
+			<BellIcon className='h-6 w-6 origin-[50%_0%] p-px duration-300 group-hover:animate-bellbeating group-hover:fill-black dark:text-white dark:group-hover:fill-white' />
 		</button>
 	);
 };
@@ -395,16 +395,16 @@ const Avatar = ({ user, logout }) => {
 				}}
 			></button>
 			<ul
-				className={`z-40 absolute text-right top-full right-0 rounded mt-3 py-0.5 bg-white dark:bg-slate-700 shadow-lg duration-200 ${
+				className={`absolute top-full right-0 z-40 mt-3 rounded bg-white py-0.5 text-right shadow-lg duration-200 dark:bg-slate-700 ${
 					!open
-						? "scale-y-0 opacity-0 -translate-y-1/2"
+						? "-translate-y-1/2 scale-y-0 opacity-0"
 						: "scale-y-100 opacity-100"
 				}`}
 			>
-				<li className='px-4 py-2 text-black dark:text-slate-400 hover:bg-sky-400 hover:text-white dark:hover:bg-slate-600 dark:hover:text-slate-300 duration-300 cursor-pointer text-sm'>
+				<li className='cursor-pointer px-4 py-2 text-sm text-black duration-300 hover:bg-sky-400 hover:text-white dark:text-slate-400 dark:hover:bg-slate-600 dark:hover:text-slate-300'>
 					Configurações
 				</li>
-				<li className='px-4 py-2 text-black dark:text-slate-400 hover:bg-sky-400 hover:text-white dark:hover:bg-slate-600 dark:hover:text-slate-300 duration-300 cursor-pointer text-sm'>
+				<li className='cursor-pointer px-4 py-2 text-sm text-black duration-300 hover:bg-sky-400 hover:text-white dark:text-slate-400 dark:hover:bg-slate-600 dark:hover:text-slate-300'>
 					Configurações
 				</li>
 				<li
@@ -412,51 +412,51 @@ const Avatar = ({ user, logout }) => {
 						// clearTimeout(close)
 						// logout()
 					}}
-					className='group relative px-4 py-2 text-black dark:text-slate-400 hover:bg-sky-400 hover:text-white dark:hover:bg-slate-600 dark:hover:text-slate-300 duration-300 cursor-pointer text-sm'
+					className='group relative cursor-pointer px-4 py-2 text-sm text-black duration-300 hover:bg-sky-400 hover:text-white dark:text-slate-400 dark:hover:bg-slate-600 dark:hover:text-slate-300'
 				>
 					Tema
-					<ul className='scale-0 opacity-0 -translate-y-1/2 translate-x-1/2 group-hover:scale-100 group-hover:opacity-100 group-hover:-translate-y-0.5 group-hover:translate-x-0 absolute right-full top-0 rounded rounded-tr-none py-0.5 bg-white dark:bg-slate-700 shadow-lg duration-200'>
+					<ul className='absolute right-full top-0 -translate-y-1/2 translate-x-1/2 scale-0 rounded rounded-tr-none bg-white py-0.5 opacity-0 shadow-lg duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0 group-hover:scale-100 group-hover:opacity-100 dark:bg-slate-700'>
 						<li
 							onClick={() => {
 								LocalStorage.set("theme", "light");
 								setTheme();
 							}}
-							className={`flex items-center justify-end gap-2 px-4 py-2 text-black dark:text-slate-400 hover:bg-sky-400 hover:text-white dark:hover:bg-slate-600 dark:hover:text-slate-300 duration-300 cursor-pointer text-sm relative ${
+							className={`relative flex cursor-pointer items-center justify-end gap-2 px-4 py-2 text-sm text-black duration-300 hover:bg-sky-400 hover:text-white dark:text-slate-400 dark:hover:bg-slate-600 dark:hover:text-slate-300 ${
 								LocalStorage.get("theme") === "light"
-									? "before:absolute before:h-full before:left-0 before:w-0.5 before:bg-sky-400 dark:before:bg-slate-400 before:rounded-r-lg"
+									? "before:absolute before:left-0 before:h-full before:w-0.5 before:rounded-r-lg before:bg-sky-400 dark:before:bg-slate-400"
 									: ""
 							}`}
 						>
 							Light
-							<SunIcon className='w-4 h-4' />
+							<SunIcon className='h-4 w-4' />
 						</li>
 						<li
 							onClick={() => {
 								LocalStorage.set("theme", "dark");
 								setTheme();
 							}}
-							className={`flex items-center justify-end gap-2 px-4 py-2 text-black dark:text-slate-400 hover:bg-sky-400 hover:text-white dark:hover:bg-slate-600 dark:hover:text-slate-300 duration-300 cursor-pointer text-sm relative ${
+							className={`relative flex cursor-pointer items-center justify-end gap-2 px-4 py-2 text-sm text-black duration-300 hover:bg-sky-400 hover:text-white dark:text-slate-400 dark:hover:bg-slate-600 dark:hover:text-slate-300 ${
 								LocalStorage.get("theme") === "dark"
-									? "before:absolute before:h-full before:left-0 before:w-0.5 before:bg-sky-400 dark:before:bg-slate-400 before:rounded-r-lg"
+									? "before:absolute before:left-0 before:h-full before:w-0.5 before:rounded-r-lg before:bg-sky-400 dark:before:bg-slate-400"
 									: ""
 							}`}
 						>
 							Dark
-							<MoonIcon className='w-4 h-4' />
+							<MoonIcon className='h-4 w-4' />
 						</li>
 						<li
 							onClick={() => {
 								LocalStorage.remove("theme");
 								setTheme();
 							}}
-							className={`flex items-center justify-end gap-2 px-4 py-2 text-black dark:text-slate-400 hover:bg-sky-400 hover:text-white dark:hover:bg-slate-600 dark:hover:text-slate-300 duration-300 cursor-pointer text-sm relative ${
+							className={`relative flex cursor-pointer items-center justify-end gap-2 px-4 py-2 text-sm text-black duration-300 hover:bg-sky-400 hover:text-white dark:text-slate-400 dark:hover:bg-slate-600 dark:hover:text-slate-300 ${
 								!LocalStorage.get("theme")
-									? "before:absolute before:h-full before:left-0 before:w-0.5 before:bg-sky-400 dark:before:bg-slate-400 before:rounded-r-lg"
+									? "before:absolute before:left-0 before:h-full before:w-0.5 before:rounded-r-lg before:bg-sky-400 dark:before:bg-slate-400"
 									: ""
 							}`}
 						>
 							System
-							<ComputerDesktopIcon className='w-4 h-4' />
+							<ComputerDesktopIcon className='h-4 w-4' />
 						</li>
 					</ul>
 				</li>
@@ -466,7 +466,7 @@ const Avatar = ({ user, logout }) => {
 						e.stopPropagation();
 						logout();
 					}}
-					className='px-4 py-2 border-t dark:border-slate-800 text-black dark:text-slate-400 hover:bg-sky-400 hover:text-white dark:hover:bg-slate-600 dark:hover:text-slate-300 duration-300 cursor-pointer text-sm'
+					className='cursor-pointer border-t px-4 py-2 text-sm text-black duration-300 hover:bg-sky-400 hover:text-white dark:border-slate-800 dark:text-slate-400 dark:hover:bg-slate-600 dark:hover:text-slate-300'
 				>
 					Deslogar
 				</li>
